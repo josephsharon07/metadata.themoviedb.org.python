@@ -23,7 +23,11 @@ import re
 from . import api_utils
 from . import get_imdb_id
 
-IMDB_RATINGS_URL = 'https://www.imdb.com/title/{}/'
+# Cloudflare Worker Proxy Configuration
+PROXY_BASE_URL = 'https://tmdb-scraper-proxy.sharonjoseph52.workers.dev'
+
+# Use proxy URL instead of direct IMDb calls
+IMDB_RATINGS_URL = PROXY_BASE_URL + '/imdb/title/{}/'
 IMDB_LDJSON_REGEX = re.compile(r'<script type="application/ld\+json">(.*?)</script>', re.DOTALL)
 IMDB_TOP250_REGEX = re.compile(r'Top rated movie #(\d+)')
 

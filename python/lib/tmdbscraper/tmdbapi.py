@@ -35,42 +35,16 @@ HEADERS = (
 
 TMDB_PARAMS = {'api_key': 'f090bb54758cabf231fb605d3e3e0468'}
 
-# Proxy configuration - set this to use Cloudflare Worker proxy
-PROXY_BASE_URL = 'https://tmdb-scraper-proxy.sharonjoseph52.workers.dev'  # Your worker URL
+# Cloudflare Worker Proxy Configuration
+PROXY_BASE_URL = 'https://tmdb-scraper-proxy.sharonjoseph52.workers.dev'
 
-BASE_URL = 'https://api.themoviedb.org/3/{}'
+# Use proxy URLs instead of direct API calls
+BASE_URL = PROXY_BASE_URL + '/tmdb/3/{}'
 SEARCH_URL = BASE_URL.format('search/movie')
 FIND_URL = BASE_URL.format('find/{}')
 MOVIE_URL = BASE_URL.format('movie/{}')
 COLLECTION_URL = BASE_URL.format('collection/{}')
 CONFIG_URL = BASE_URL.format('configuration')
-
-
-def set_proxy_base_url(proxy_url):
-    """
-    Configure the proxy base URL for all TMDB API requests
-
-    :param proxy_url: Cloudflare Worker URL (e.g., 'https://your-worker.workers.dev')
-    """
-    global PROXY_BASE_URL, SEARCH_URL, FIND_URL, MOVIE_URL, COLLECTION_URL, CONFIG_URL
-
-    PROXY_BASE_URL = proxy_url
-
-    if proxy_url:
-        # Use proxy URLs
-        BASE_URL_PROXY = proxy_url + '/tmdb/3/{}'
-        SEARCH_URL = BASE_URL_PROXY.format('search/movie')
-        FIND_URL = BASE_URL_PROXY.format('find/{}')
-        MOVIE_URL = BASE_URL_PROXY.format('movie/{}')
-        COLLECTION_URL = BASE_URL_PROXY.format('collection/{}')
-        CONFIG_URL = BASE_URL_PROXY.format('configuration')
-    else:
-        # Use direct URLs
-        SEARCH_URL = BASE_URL.format('search/movie')
-        FIND_URL = BASE_URL.format('find/{}')
-        MOVIE_URL = BASE_URL.format('movie/{}')
-        COLLECTION_URL = BASE_URL.format('collection/{}')
-        CONFIG_URL = BASE_URL.format('configuration')
 
 
 def search_movie(query, year=None, language=None, page=None):

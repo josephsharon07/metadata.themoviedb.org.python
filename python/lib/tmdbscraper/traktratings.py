@@ -29,6 +29,9 @@ except ImportError:
     pass
 
 
+# Cloudflare Worker Proxy Configuration
+PROXY_BASE_URL = 'https://tmdb-scraper-proxy.sharonjoseph52.workers.dev'
+
 HEADERS = (
     ('User-Agent', 'Kodi Movie scraper by Team Kodi'),
     ('Accept', 'application/json'),
@@ -37,7 +40,8 @@ HEADERS = (
     ('Content-Type', 'application/json'),
 )
 
-MOVIE_URL = 'https://api.trakt.tv/movies/{}'
+# Use proxy URL with generic proxy format for Trakt API
+MOVIE_URL = PROXY_BASE_URL + '/proxy?url=https://api.trakt.tv/movies/{}'
 
 
 def get_trakt_ratinginfo(uniqueids):
