@@ -5,7 +5,34 @@ except ImportError: # py2 / py3
     from urllib.parse import quote
 
 API_KEY = '384afe262ee0962545a752ff340e3ce4'
-API_URL = 'https://webservice.fanart.tv/v3/movies/{}'
+
+# Proxy configuration - set this to use Cloudflare Worker proxy
+PROXY_BASE_URL = 'https://tmdb-scraper-proxy.sharonjoseph52.workers.dev'  # Your worker URL
+
+# Configure API URL based on proxy setting
+if PROXY_BASE_URL:
+    # Use proxy URL
+    API_URL = PROXY_BASE_URL + '/fanart/v3/movies/{}'
+else:
+    # Use direct URL
+    API_URL = 'https://webservice.fanart.tv/v3/movies/{}'
+
+def set_proxy_base_url(proxy_url):
+    """
+    Configure the proxy base URL for Fanart.tv API requests
+    
+    :param proxy_url: Cloudflare Worker URL (e.g., 'https://your-worker.workers.dev')
+    """
+    global PROXY_BASE_URL, API_URL
+    
+    PROXY_BASE_URL = proxy_url
+    
+    if proxy_url:
+        # Use proxy URL
+        API_URL = proxy_url + '/fanart/v3/movies/{}'
+    else:
+        # Use direct URL
+        API_URL = 'https://webservice.fanart.tv/v3/movies/{}'
 
 ARTMAP = {
     'movielogo': 'clearlogo',

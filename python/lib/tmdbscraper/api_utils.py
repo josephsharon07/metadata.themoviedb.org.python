@@ -31,11 +31,11 @@ except ModuleNotFoundError:
 
 # from pprint import pformat
 try: #PY2 / PY3
-    from urllib2 import Request, urlopen
+    from urllib2 import Request, urlopen, ProxyHandler, build_opener, install_opener
     from urllib2 import URLError
     from urllib import urlencode
 except ImportError:
-    from urllib.request import Request, urlopen
+    from urllib.request import Request, urlopen, ProxyHandler, build_opener, install_opener
     from urllib.error import URLError
     from urllib.parse import urlencode
 try:
@@ -50,6 +50,25 @@ HEADERS = {}
 def set_headers(headers):
     HEADERS.clear()
     HEADERS.update(headers)
+
+
+def set_proxy(proxy_url=None):
+    """
+    Configure HTTP/HTTPS proxy for API requests
+    
+    :param proxy_url: Proxy URL in format 'http://proxy:port' or None to disable
+    """
+    if proxy_url:
+        proxy_handler = ProxyHandler({'http': proxy_url, 'https': proxy_url})
+        opener = build_opener(proxy_handler)
+        install_opener(opener)
+        if xbmc:
+            xbmc.log('Configured proxy: {}'.format(proxy_url), xbmc.LOGINFO)
+    else:
+        # Reset to default opener (no proxy)
+        install_opener(build_opener())
+        if xbmc:
+            xbmc.log('Proxy disabled', xbmc.LOGINFO)
 
 
 def load_info(url, params=None, default=None, resp_type = 'json', max_retries=3, retry_delay=1):
